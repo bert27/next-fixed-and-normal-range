@@ -47,28 +47,32 @@ describe("FixedRangeSlider", () => {
     ).toBeInTheDocument();
   });
 
-   it("updates minIndex if newIndex is closer to minIndex", () => {
+  it("updates minIndex if newIndex is closer to minIndex", () => {
     render(<FixedRangeSlider values={mockValues} />);
     const markerIndex = 2; // Index of 10.99 €
     const clickPosition = (markerIndex / (mockValues.length - 1)) * 100;
 
-    vi.spyOn(HTMLDivElement.prototype, "getBoundingClientRect").mockReturnValue({
-      left: 0,
-      width: 100,
-      right: 100,
-      top: 0,
-      bottom: 0,
-      height: 0,
-      x: 0,
-      y: 0,
-      toJSON: () => {},
-    });
+    vi.spyOn(HTMLDivElement.prototype, "getBoundingClientRect").mockReturnValue(
+      {
+        left: 0,
+        width: 100,
+        right: 100,
+        top: 0,
+        bottom: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      }
+    );
 
     fireEvent.click(screen.getByTestId("markers-container"), {
       clientX: clickPosition,
     });
 
-    expect(screen.getByText(`Min: ${mockValues[markerIndex].toFixed(2)} €`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`Min: ${mockValues[markerIndex].toFixed(2)} €`)
+    ).toBeInTheDocument();
   });
 
   it("updates maxIndex if newIndex is closer to maxIndex", () => {
@@ -76,23 +80,27 @@ describe("FixedRangeSlider", () => {
     const markerIndex = 4; // Index of 50.99 €
     const clickPosition = (markerIndex / (mockValues.length - 1)) * 100;
 
-    vi.spyOn(HTMLDivElement.prototype, "getBoundingClientRect").mockReturnValue({
-      left: 0,
-      width: 100,
-      right: 100,
-      top: 0,
-      bottom: 0,
-      height: 0,
-      x: 0,
-      y: 0,
-      toJSON: () => {},
-    });
+    vi.spyOn(HTMLDivElement.prototype, "getBoundingClientRect").mockReturnValue(
+      {
+        left: 0,
+        width: 100,
+        right: 100,
+        top: 0,
+        bottom: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      }
+    );
 
     fireEvent.click(screen.getByTestId("markers-container"), {
       clientX: clickPosition,
     });
 
-    expect(screen.getByText(`Max: ${mockValues[markerIndex].toFixed(2)} €`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`Max: ${mockValues[markerIndex].toFixed(2)} €`)
+    ).toBeInTheDocument();
   });
 
   it("handles mouse down and drag events correctly for min handle", () => {

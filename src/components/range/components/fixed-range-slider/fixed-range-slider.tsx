@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 
-import { addEventListeners, removeEventListeners } from "./utils";
+import { addEventListeners, removeEventListeners } from "../utils";
 import "./fixed-range-slider.css";
 interface FixedRangeSliderProps {
   values: number[];
