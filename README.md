@@ -2,6 +2,13 @@
 
 <p>This project demonstrates a range slider component that supports two modes: fixed values and normal range. It uses <strong>Next.js</strong>, <strong>Turbopack</strong>, and <strong>Vitest</strong> for development and testing.</p>
 
+  <h2>Online Demo</h2>
+  <p>You can try out the range slider for both modes:</p>
+  <ul>
+    <li> <a href="https://range-slider-next.netlify.app/exercise1">Exercise 1 (Normal Range Slider)</a></li>
+    <li> <a href="https://range-slider-next.netlify.app/exercise2">Exercise 2 (Fixed Range Slider)</a></li>
+  </ul>
+  
 <h2>Getting Started</h2>
 
 <h3>Installation</h3>
