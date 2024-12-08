@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import styled from "styled-components";
-import { addEventListeners, removeEventListeners } from "./utils";
 
+import { addEventListeners, removeEventListeners } from "./utils";
+import "./fixed-range-slider.css";
 interface FixedRangeSliderProps {
   values: number[];
 }
@@ -79,24 +79,27 @@ const FixedRangeSlider: React.FC<FixedRangeSliderProps> = ({ values }) => {
   };
 
   return (
-    <FixedRangeSliderWrapper>
-      <RangeTrack ref={rangeRef} onClick={handleClick}>
-        <RangeHighlight
+    <div className="fixed-range-slider-wrapper">
+      <div className="range-track" ref={rangeRef} onClick={handleClick}>
+        <div
+          className="range-highlight"
           style={{
             left: `${(minIndex / (values.length - 1)) * 100}%`,
             right: `${100 - (maxIndex / (values.length - 1)) * 100}%`,
           }}
         />
-        <MarkersContainer data-testid="markers-container">
+        <div className="markers-container" data-testid="markers-container">
           {values.map((value, index) => (
-            <RangeMarker
+            <div
               key={index}
+              className="range-marker"
               style={{
                 left: `${(index / (values.length - 1)) * 100}%`,
               }}
               onClick={() => handleMarkerClick(index)}
             >
-              <MarkerCircle
+              <div
+                className="marker-circle"
                 style={{
                   background:
                     index >= minIndex && index <= maxIndex ? "#2c2d3f" : "#fff",
@@ -107,29 +110,29 @@ const FixedRangeSlider: React.FC<FixedRangeSliderProps> = ({ values }) => {
                 }}
               />
               <span>{value.toFixed(2)} €</span>
-            </RangeMarker>
+            </div>
           ))}
-        </MarkersContainer>
-        <RangeHandle
+        </div>
+        <div
+          className="range-handle"
           data-testid="min-handle"
           style={{
             left: `${(minIndex / (values.length - 1)) * 100}%`,
-            transform: `translateX(-89%)`,
           }}
           onMouseDown={() => handleMouseOrTouchDown("min")}
           onTouchStart={() => handleMouseOrTouchDown("min")}
         />
-        <RangeHandle
+        <div
+          className="range-handle"
           data-testid="max-handle"
           style={{
             left: `${(maxIndex / (values.length - 1)) * 100}%`,
-            transform: `translateX(-89%)`,
           }}
           onMouseDown={() => handleMouseOrTouchDown("max")}
           onTouchStart={() => handleMouseOrTouchDown("max")}
         />
-      </RangeTrack>
-      <RangeLabels>
+      </div>
+      <div className="range-labels">
         <span>
           {values.length > 0
             ? `Min: ${values[minIndex].toFixed(2)} €`
@@ -140,94 +143,9 @@ const FixedRangeSlider: React.FC<FixedRangeSliderProps> = ({ values }) => {
             ? `Max: ${values[maxIndex].toFixed(2)} €`
             : "Max: -"}
         </span>
-      </RangeLabels>
-    </FixedRangeSliderWrapper>
+      </div>
+    </div>
   );
 };
-
-const FixedRangeSliderWrapper = styled.div`
-  width: 90%;
-  position: relative;
-  height: 60px;
-  margin: auto;
-`;
-
-const RangeTrack = styled.div`
-  width: 100%;
-  height: 4px;
-  background: #bebec4;
-  position: relative;
-  border-radius: 2px;
-  margin: 20px 0;
-`;
-
-const RangeHighlight = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  background: #2c2d3f;
-  border-radius: 2px;
-`;
-
-const MarkersContainer = styled.div`
-  position: absolute;
-  top: -7px;
-  width: 100%;
-`;
-
-const RangeMarker = styled.div`
-  position: absolute;
-  transform: translateX(-50%);
-  text-align: center;
-  cursor: pointer;
-
-  span {
-    display: block;
-    margin-top: 8px; /* Ajusta el valor según lo necesites */
-    font-size: 12px; /* Opcional: ajusta el tamaño del texto */
-  }
-`;
-
-const MarkerCircle = styled.div`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-  position: relative;
-
-  &:hover {
-    width: 22px;
-    height: 22px;
-    top: -5px;
-  }
-`;
-
-const RangeHandle = styled.div`
-  position: absolute;
-  top: -12px;
-  width: 22px;
-  height: 22px;
-  background: #2c2d3f;
-  border-radius: 50%;
-  cursor: grab;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.2);
-  }
-
-  &:active {
-    user-select: none;
-  }
-`;
-
-const RangeLabels = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 44px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-`;
 
 export default FixedRangeSlider;

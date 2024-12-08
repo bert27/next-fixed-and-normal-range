@@ -1,0 +1,82 @@
+.fixed-range-slider-wrapper {
+  width: 90%;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.range-track {
+  width: 98%;
+  height: 4px;
+  background: #bebec4;
+  position: relative;
+  border-radius: 2px;
+}
+
+.range-highlight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #2c2d3f;
+  border-radius: 2px;
+}
+
+.markers-container {
+  position: absolute;
+  top: -7px;
+  width: 100%;
+}
+
+.range-marker {
+  position: absolute;
+  text-align: center;
+  cursor: pointer;
+}
+
+.range-marker span {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.marker-circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.marker-circle:hover {
+  width: 22px;
+  height: 22px;
+  top: -5px;
+}
+
+.range-handle {
+  position: absolute;
+  top: -12px;
+  width: 22px;
+  height: 22px;
+  background: #2c2d3f;
+  border-radius: 50%;
+  cursor: grab;
+  transition: transform 0.2s;
+  transform: translateX(-13%);
+}
+
+.range-handle:hover {
+  transform: scale(1.2);
+}
+
+.range-handle:active {
+  user-select: none;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 44px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
