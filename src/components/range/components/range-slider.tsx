@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
+import styled from "styled-components";
+import { addEventListeners, removeEventListeners } from "./utils";
 
 interface RangeSliderProps {
-  min?: number;
-  max?: number;
-  step?: number;
+  min: number;
+  max: number;
+  step: number;
   minGap?: number;
 }
 
@@ -20,10 +22,10 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
 
   const rangeRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setMinValue(min);
-    setMaxValue(max);
-  }, [min, max]);
+  const colorSliderSelect = "#2C2D3F";
+  const colorSliderUnselect = "#bebec4";
+  const widthRangeHandle = "22px";
+  const heightRangeHandle = "22px";
 
   const handleMinChange = (value: number) => {
     if (value < min || value > maxValue - minGap) return;
@@ -45,7 +47,6 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
       event instanceof MouseEvent ? event.clientX : event.touches[0]?.clientX;
 
     const rect = rangeRef.current.getBoundingClientRect();
-
     const percent = (clientX - rect.left) / rect.width;
     const newValue = Math.round((min + percent * (max - min)) / step) * step;
 
@@ -54,26 +55,6 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     } else {
       handleMaxChange(Math.max(newValue, minValue + step));
     }
-  };
-
-  const addEventListeners = (
-    moveHandler: (event: MouseEvent | TouchEvent) => void,
-    upHandler: () => void
-  ) => {
-    document.addEventListener("mousemove", moveHandler);
-    document.addEventListener("mouseup", upHandler);
-    document.addEventListener("touchmove", moveHandler);
-    document.addEventListener("touchend", upHandler);
-  };
-
-  const removeEventListeners = (
-    moveHandler: (event: MouseEvent | TouchEvent) => void,
-    upHandler: () => void
-  ) => {
-    document.removeEventListener("mousemove", moveHandler);
-    document.removeEventListener("mouseup", upHandler);
-    document.removeEventListener("touchmove", moveHandler);
-    document.removeEventListener("touchend", upHandler);
   };
 
   const handleMouseOrTouchDown = (type: "min" | "max") => {
@@ -105,51 +86,52 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const formatValue = (value: number) =>
     `${value.toFixed(2).replace(".", ",")} €`;
 
-  const colorSliderSelect = "#2C2D3F";
-  const colorSliderUnselect = "#bebec4";
-  const widthRangeHandle = "22px";
-
   return (
-    <div className="range-slider" ref={rangeRef}>
-      <div className="range-labels">
-        <input
+    <RangeSliderWrapper ref={rangeRef}>
+      <RangeLabels>
+        <Input
           type="number"
-          className="range-label"
           value={minValue}
           step={step}
           onChange={(e) => handleMinChange(parseFloat(e.target.value))}
         />
-        <input
+        <Input
           type="number"
-          className="range-label"
           value={maxValue}
           step={step}
           onChange={(e) => handleMaxChange(parseFloat(e.target.value))}
         />
-      </div>
-      <div className="range-track">
-        <div
-          className="range-highlight"
+      </RangeLabels>
+
+      <RangeTrack $width={100} $background={colorSliderUnselect}>
+        <RangeHighlight
+          $background={colorSliderSelect}
           style={{
             left: `${((minValue - min) / (max - min)) * 100}%`,
             right: `${100 - ((maxValue - min) / (max - min)) * 100}%`,
           }}
         />
-        <div
-          className="range-handle"
+        <RangeHandle
+          $background={colorSliderSelect}
           role="slider"
           aria-valuemin={min}
           aria-valuemax={max}
           aria-valuenow={minValue}
           aria-label={`Minimum value: ${formatValue(minValue)}`}
           tabIndex={0}
-          style={{ left: `${((minValue - min) / (max - min)) * 100}%` }}
+          $width={widthRangeHandle}
+          $height={heightRangeHandle}
+          style={{
+            left: `${((minValue - min) / (max - min)) * 100}%`,
+          }}
           onMouseDown={() => handleMouseOrTouchDown("min")}
           onTouchStart={() => handleMouseOrTouchDown("min")}
           onKeyDown={(e) => handleKeyDown(e, "min")}
         />
-        <div
-          className="range-handle"
+        <RangeHandle
+          $background={colorSliderSelect}
+          $width={widthRangeHandle}
+          $height={heightRangeHandle}
           role="slider"
           aria-valuemin={min}
           aria-valuemax={max}
@@ -163,60 +145,70 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
           onTouchStart={() => handleMouseOrTouchDown("max")}
           onKeyDown={(e) => handleKeyDown(e, "max")}
         />
-      </div>
-      <style jsx>{`
-        .range-slider {
-          width: 88%;
-          position: relative;
-          height: 60px;
-        }
-        .range-labels {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-          margin-bottom: 10px;
-        }
-        .range-label {
-          width: 80px;
-          font-size: 16px;
-          font-weight: bold;
-          color: #333;
-          text-align: center;
-        }
-        .range-track {
-          width: calc(100% + ${widthRangeHandle});
-          height: 3px;
-          position: relative;
-          margin: 10px 0;
-          background: ${colorSliderUnselect};
-          border-radius: 4px;
-        }
-        .range-highlight {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          background: ${colorSliderSelect};
-          border-radius: 4px;
-        }
-        .range-handle {
-          position: absolute;
-          top: -8px;
-          width: ${widthRangeHandle};
-          height: ${widthRangeHandle};
-          background: ${colorSliderSelect};
-          border-radius: 50%;
-          cursor: grab;
-          transition: transform 0.2s;
-        }
-        .range-handle:hover {
-          transform: scale(1.2);
-        }
-        .range-handle:focus {
-          transform: scale(1.2);
-        }
-      `}</style>
-    </div>
+      </RangeTrack>
+    </RangeSliderWrapper>
   );
 };
+
+const RangeSliderWrapper = styled.div`
+  width: 88%;
+  position: relative;
+  height: 60px;
+`;
+
+const RangeLabels = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+`;
+
+const Input = styled.input`
+  width: 80px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+`;
+
+const RangeTrack = styled.div<{ $background: string; $width: number }>`
+  width: ${(props) => `calc(${props.$width}% + 22px)`};
+  height: 3px;
+  position: relative;
+  margin: 10px 0;
+  background: ${(props) => props.$background};
+  border-radius: 4px;
+`;
+
+const RangeHighlight = styled.div<{ $background: string }>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: ${(props) => props.$background};
+  border-radius: 4px;
+`;
+
+const RangeHandle = styled.div<{
+  $width: string;
+  $height: string;
+  $background: string;
+}>`
+  position: absolute;
+  top: -8px;
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
+  background: ${(props) => props.$background};
+  border-radius: 50%;
+  cursor: grab;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &:focus {
+    transform: scale(1.2);
+  }
+`;
 
 export default RangeSlider;

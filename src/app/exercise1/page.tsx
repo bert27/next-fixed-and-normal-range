@@ -1,48 +1,17 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Layout from "@/components/layout";
 import { RangeSelector } from "@/components/range/range";
+import { fetchRangeValues } from "../services/api-service";
+import Layout from "@/components/layout";
 
-export default function Exercise1Page() {
-  const [minValue, setMinValue] = useState<number | undefined>(undefined);
-  const [maxValue, setMaxValue] = useState<number | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchRangeValues = async () => {
-    try {
-      const response = await fetch(
-        "https://demo3042680.mockable.io/range-values"
-      );
-      if (!response.ok) {
-        throw new Error("Error fetching range values");
-      }
-      const data = await response.json();
-
-      setMinValue(data.min);
-      setMaxValue(data.max);
-      setError(null);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching range values:", error);
-      setError("Error loading range values. Please try again later.");
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchRangeValues();
-  }, []);
+export default async function Exercise1Page() {
+  const { data, error } = await fetchRangeValues();
 
   return (
-    <Layout
-      title="Mango"
-      subtitle="Reusable Input Range"
-      isLoading={isLoading}
-      errorMessage={error}
-    >
-      <RangeSelector mode="normal" min={minValue} max={maxValue} step={1} />
+    <Layout error={error}>
+      <h1>Mango</h1>
+      <h2>Reusable Input Range</h2>
+      {data && (
+        <RangeSelector mode="normal" min={data.min} max={data.max} step={1} />
+      )}
     </Layout>
   );
 }

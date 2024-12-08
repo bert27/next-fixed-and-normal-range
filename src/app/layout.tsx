@@ -1,11 +1,21 @@
-import './globals.css';
+// src/app/layout.tsx
+import StyledComponentsRegistry from "@/lib/registry";
+import "./globals.css";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+interface RootLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
   );
 }
+
+RootLayout.Content = function RootLayoutContent({ children }: RootLayoutProps) {
+  return <StyledComponentsRegistry>{children}</StyledComponentsRegistry>;
+};

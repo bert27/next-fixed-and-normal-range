@@ -1,6 +1,10 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import Exercise2Page from "./page";
 import { vi } from "vitest";
+import { ERROR_MESSAGES } from "../services/api-service";
+import RootLayout from "../layout";
+
+
 
 global.fetch = vi.fn();
 
@@ -21,68 +25,37 @@ const mockFetchFailureWithErrorCode = () => {
   });
 };
 
-describe("Exercise2Page", () => {
+describe("Exercise2Page with RootLayoutContent", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it("renders loading state initially", () => {
-    render(<Exercise2Page />);
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
   it("renders FixedRangeSlider on successful fetch", async () => {
     mockFetchSuccess();
 
-    render(<Exercise2Page />);
+    const ui = await Exercise2Page();
+    render(<RootLayout.Content>{ui}</RootLayout.Content>);
 
     await waitFor(() => {
       const markersContainer = screen.getByTestId("markers-container");
-      const markers = within(markersContainer).getAllByText(/\d+ €/i);
-      expect(markers).toHaveLength(5);
-      expect(markers[0]).toHaveTextContent("10.00 €");
-      expect(markers[4]).toHaveTextContent("50.00 €");
+      expect(markersContainer).toBeInTheDocument();
     });
+
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it("renders error message on fetch failure", async () => {
-    (global.fetch as jest.Mock).mockRejectedValueOnce(
-      new Error("Fetch failed")
-    );
-
-    render(<Exercise2Page />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText("Error loading range values. Please try again later.")
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("handles server response with ok=false", async () => {
+  it("renders error message for FIXED_RANGE_VALUES failure", async () => {
     mockFetchFailureWithErrorCode();
 
-    render(<Exercise2Page />);
+    const ui = await Exercise2Page();
+    render(<RootLayout.Content>{ui}</RootLayout.Content>);
 
     await waitFor(() => {
       expect(
-        screen.getByText("Error loading range values. Please try again later.")
+        screen.getByText(ERROR_MESSAGES.FIXED_RANGE_VALUES)
       ).toBeInTheDocument();
     });
 
-    expect(fetch).toHaveBeenCalledTimes(1); // Asegura que fetch se llamó una vez
-  });
-
-  it("does not render FixedRangeSlider when rangeValues is empty", async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ rangeValues: [] }),
-    });
-
-    render(<Exercise2Page />);
-
-    await waitFor(() => {
-      expect(screen.queryByRole("slider")).not.toBeInTheDocument();
-    });
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 });

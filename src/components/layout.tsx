@@ -1,43 +1,15 @@
-"use client";
-
 import React from "react";
+import ErrorDisplay from "./error-display";
 
 interface LayoutProps {
-  title: string;
-  subtitle: string;
-  isLoading: boolean;
-  errorMessage: string | null;
   children: React.ReactNode;
+  error: string | null;
 }
 
-export default function Layout({
-  title,
-  subtitle,
-  isLoading,
-  errorMessage,
-  children,
-}: LayoutProps) {
-  if (isLoading) {
-    return (
-      <div role="alert" aria-live="polite">
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
-  if (errorMessage) {
-    return (
-      <div role="alert" aria-live="assertive">
-        <p>{errorMessage}</p>
-      </div>
-    );
-  }
-
+export default function Layout({ children, error }: LayoutProps) {
   return (
-    <div>
-      <h1>{title}</h1>
-      <h2>{subtitle}</h2>
-      <div style={{ padding: "20px", background: "white" }}>{children}</div>
+    <div style={{ padding: "20px", background: "white" }}>
+      {error ? <ErrorDisplay error={error} /> : children}
     </div>
   );
 }

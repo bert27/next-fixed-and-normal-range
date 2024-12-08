@@ -1,45 +1,17 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import Layout from "@/components/layout";
 import { RangeSelector } from "@/components/range/range";
+import { fetchFixedRangeValues } from "../services/api-service";
+import Layout from "@/components/layout";
 
-export default function Exercise2Page() {
-  const [rangeValues, setRangeValues] = useState<number[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchRangeValues = async () => {
-    try {
-      const response = await fetch(
-        "https://demo3042680.mockable.io/range-values-fixed"
-      );
-      if (!response.ok) {
-        throw new Error("Error fetching range values");
-      }
-      const data = await response.json();
-      setRangeValues(data.rangeValues);
-      setError(null);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching range values:", error);
-      setError("Error loading range values. Please try again later.");
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchRangeValues();
-  }, []);
+export default async function Exercise2Page() {
+  const { data, error } = await fetchFixedRangeValues();
 
   return (
-    <Layout
-      title="Mango"
-      subtitle="Fixed Values Range"
-      isLoading={isLoading}
-      errorMessage={error}
-    >
-      <RangeSelector mode="fixed" values={rangeValues} />
+    <Layout error={error}>
+      <h1>Mango</h1>
+      <h2>Fixed Values Range</h2>
+      {data?.rangeValues && (
+        <RangeSelector mode="fixed" values={data.rangeValues} />
+      )}
     </Layout>
   );
 }
