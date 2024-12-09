@@ -1,5 +1,3 @@
-// src/app/layout.tsx
-import StyledComponentsRegistry from "@/lib/registry";
 import "./globals.css";
 import { Metadata } from "next";
 
@@ -19,13 +17,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
 
 RootLayout.Content = function RootLayoutContent({ children }: RootLayoutProps) {
-  return <StyledComponentsRegistry>{children}</StyledComponentsRegistry>;
+  return <>{children}</>;
 };

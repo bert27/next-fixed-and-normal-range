@@ -17,9 +17,9 @@ export const RangeSelector: React.FC<RangeSelectorProps> = ({
   max = 100,
   step = 1,
 }) => {
-  return mode === "fixed" && values.length > 0 ? (
-    <FixedRangeSlider values={values} />
-  ) : mode === "normal" ? (
-    <RangeSlider min={min} max={max} step={step} />
-  ) : null;
+  if (mode === "fixed") {
+    return <FixedRangeSlider values={values} />;
+  }
+
+  return <RangeSlider min={min} max={max} step={step} />;
 };

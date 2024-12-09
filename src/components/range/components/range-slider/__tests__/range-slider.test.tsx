@@ -72,24 +72,6 @@ describe("RangeSlider Component", () => {
     expect(maxInput.value).toBe("100"); // Sin cambios
   });
 
-  it("handles keyboard navigation for minimum slider", () => {
-    render(<RangeSlider {...defaultProps} />);
-    const minSlider = screen.getByRole("slider", { name: /Minimum value:/ });
-    fireEvent.keyDown(minSlider, { key: "ArrowRight" });
-    expect(screen.getByDisplayValue("1")).toBeInTheDocument();
-    fireEvent.keyDown(minSlider, { key: "ArrowLeft" });
-    expect(screen.getByDisplayValue("0")).toBeInTheDocument();
-  });
-
-  it("handles keyboard navigation for maximum slider", () => {
-    render(<RangeSlider {...defaultProps} />);
-    const maxSlider = screen.getByRole("slider", { name: /Maximum value:/ });
-    fireEvent.keyDown(maxSlider, { key: "ArrowLeft" });
-    expect(screen.getByDisplayValue("99")).toBeInTheDocument();
-    fireEvent.keyDown(maxSlider, { key: "ArrowRight" });
-    expect(screen.getByDisplayValue("100")).toBeInTheDocument();
-  });
-
   it("renders the formatted value correctly", () => {
     render(<RangeSlider {...defaultProps} />);
     const minSlider = screen.getByRole("slider", { name: /Minimum value:/ });
@@ -167,5 +149,30 @@ describe("RangeSlider Component", () => {
 
     const maxInput = screen.getByDisplayValue("75") as HTMLInputElement;
     expect(maxInput.value).toBe("75");
+  });
+
+  it("handles keyboard navigation for minimum slider", () => {
+    render(<RangeSlider {...defaultProps} />);
+    const minSlider = screen.getByRole("slider", { name: /Minimum value:/ });
+
+    fireEvent.keyDown(minSlider, { key: "ArrowRight" });
+    expect(screen.getByDisplayValue("1")).toBeInTheDocument();
+
+    fireEvent.keyDown(minSlider, { key: "ArrowLeft" });
+    expect(screen.getByDisplayValue("0")).toBeInTheDocument();
+
+    fireEvent.keyDown(minSlider, { key: "ArrowUp" });
+    expect(screen.getByDisplayValue("1")).toBeInTheDocument();
+  });
+
+  it("handles keyboard navigation for maximum slider", () => {
+    render(<RangeSlider {...defaultProps} />);
+    const maxSlider = screen.getByRole("slider", { name: /Maximum value:/ });
+
+    fireEvent.keyDown(maxSlider, { key: "ArrowLeft" });
+    expect(screen.getByDisplayValue("99")).toBeInTheDocument();
+
+    fireEvent.keyDown(maxSlider, { key: "ArrowRight" });
+    expect(screen.getByDisplayValue("100")).toBeInTheDocument();
   });
 });

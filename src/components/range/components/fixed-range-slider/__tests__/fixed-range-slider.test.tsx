@@ -19,7 +19,7 @@ describe("FixedRangeSlider", () => {
 
   it("updates indices when marker is clicked", () => {
     render(<FixedRangeSlider values={mockValues} />);
-    const markerIndex = 2; // Index of 10.99 €
+    const markerIndex = 2;
     const marker = screen.getByText(`${mockValues[markerIndex].toFixed(2)} €`);
     fireEvent.click(marker);
     expect(
@@ -29,7 +29,7 @@ describe("FixedRangeSlider", () => {
 
   it("updates minIndex when a lower marker is clicked", () => {
     render(<FixedRangeSlider values={mockValues} />);
-    const markerIndex = 1; // Index of 5.99 €
+    const markerIndex = 1;
     const marker = screen.getByText(`${mockValues[markerIndex].toFixed(2)} €`);
     fireEvent.click(marker);
     expect(
@@ -39,7 +39,7 @@ describe("FixedRangeSlider", () => {
 
   it("updates maxIndex when a higher marker is clicked", () => {
     render(<FixedRangeSlider values={mockValues} />);
-    const markerIndex = 4; // Index of 50.99 €
+    const markerIndex = 4;
     const marker = screen.getByText(`${mockValues[markerIndex].toFixed(2)} €`);
     fireEvent.click(marker);
     expect(
@@ -49,7 +49,7 @@ describe("FixedRangeSlider", () => {
 
   it("updates minIndex if newIndex is closer to minIndex", () => {
     render(<FixedRangeSlider values={mockValues} />);
-    const markerIndex = 2; // Index of 10.99 €
+    const markerIndex = 2;
     const clickPosition = (markerIndex / (mockValues.length - 1)) * 100;
 
     vi.spyOn(HTMLDivElement.prototype, "getBoundingClientRect").mockReturnValue(
@@ -77,7 +77,7 @@ describe("FixedRangeSlider", () => {
 
   it("updates maxIndex if newIndex is closer to maxIndex", () => {
     render(<FixedRangeSlider values={mockValues} />);
-    const markerIndex = 4; // Index of 50.99 €
+    const markerIndex = 4;
     const clickPosition = (markerIndex / (mockValues.length - 1)) * 100;
 
     vi.spyOn(HTMLDivElement.prototype, "getBoundingClientRect").mockReturnValue(
@@ -126,7 +126,7 @@ describe("FixedRangeSlider", () => {
     fireEvent.mouseMove(document, { clientX: 50 });
     fireEvent.mouseUp(document);
 
-    const expectedIndex = 3; // Based on the mockValues array
+    const expectedIndex = 3;
     expect(
       screen.getByText(`Min: ${mockValues[expectedIndex].toFixed(2)} €`)
     ).toBeInTheDocument();
@@ -155,7 +155,7 @@ describe("FixedRangeSlider", () => {
     fireEvent.mouseMove(document, { clientX: 20 });
     fireEvent.mouseUp(document);
 
-    const expectedIndex = 1; // Based on the mockValues array
+    const expectedIndex = 1;
     expect(
       screen.getByText(`Max: ${mockValues[expectedIndex].toFixed(2)} €`)
     ).toBeInTheDocument();
@@ -184,7 +184,7 @@ describe("FixedRangeSlider", () => {
     fireEvent.touchMove(document, { touches: [{ clientX: 70 }] });
     fireEvent.touchEnd(document);
 
-    const expectedIndex = 4; // Based on the mockValues array
+    const expectedIndex = 4;
     expect(
       screen.getByText(`Min: ${mockValues[expectedIndex].toFixed(2)} €`)
     ).toBeInTheDocument();
@@ -213,9 +213,16 @@ describe("FixedRangeSlider", () => {
     fireEvent.touchMove(document, { touches: [{ clientX: 50 }] });
     fireEvent.touchEnd(document);
 
-    const expectedIndex = 3; // Based on the mockValues array
+    const expectedIndex = 3;
     expect(
       screen.getByText(`Max: ${mockValues[expectedIndex].toFixed(2)} €`)
     ).toBeInTheDocument();
+  });
+
+  it("renders default labels when values array is empty", () => {
+    render(<FixedRangeSlider values={[]} />);
+
+    expect(screen.getByText("Min: -")).toBeInTheDocument();
+    expect(screen.getByText("Max: -")).toBeInTheDocument();
   });
 });
