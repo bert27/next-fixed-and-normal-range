@@ -1,0 +1,22 @@
+.rangeHandle {
+  position: absolute;
+  top: -8px;
+  width: var(--sizeBall, 22px);
+  height: var(--sizeBall, 22px);
+  background: #2c2d3f;
+  border-radius: 50%;
+  cursor: grab;
+  transition: transform 0.2s;
+}
+
+.rangeHandle:hover {
+  transform: scale(1.5);
+}
+
+.rangeHandle:active {
+  user-select: none;
+}
+
+.rangeHandle:focus {
+  transform: scale(1.2);
+}

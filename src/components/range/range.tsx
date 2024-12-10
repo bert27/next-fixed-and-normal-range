@@ -1,6 +1,6 @@
 import React from "react";
 import FixedRangeSlider from "./components/fixed-range-slider/fixed-range-slider";
-import RangeSlider from "./components/range-slider/range-slider";
+import { RangeSlider } from "./components/range-slider/range-slider";
 
 interface RangeSelectorProps {
   mode: "fixed" | "normal";

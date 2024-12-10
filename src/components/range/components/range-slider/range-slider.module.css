@@ -1,0 +1,29 @@
+.rangeSliderWrapper {
+  width: 90%;
+  margin: auto;
+}
+
+.rangeLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.rangeTrack {
+  width: 97%;
+  height: 3px;
+  position: relative;
+  margin: 10px 0;
+  background: #bebec4;
+  border-radius: 4px;
+  margin: 1%;
+}
+
+.rangeHighlight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #2c2d3f;
+  border-radius: 4px;
+}

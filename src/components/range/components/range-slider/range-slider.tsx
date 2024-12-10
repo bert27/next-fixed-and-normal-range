@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { addEventListeners, removeEventListeners } from "../utils";
-import "./range-slider.css";
+import styles from "./range-slider.module.css";
+import { CustomInput } from "../atoms/custom-input";
+import { RangeHandle } from "../atoms/range-handle/range-handle";
 
 interface RangeSliderProps {
   min: number;
@@ -11,7 +12,7 @@ interface RangeSliderProps {
   minGap?: number;
 }
 
-const RangeSlider: React.FC<RangeSliderProps> = ({
+export const RangeSlider: React.FC<RangeSliderProps> = ({
   min = 0,
   max = 100,
   step = 1,
@@ -52,16 +53,6 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     }
   };
 
-  const handleMouseOrTouchDown = (type: "min" | "max") => {
-    const moveHandler = (event: MouseEvent | TouchEvent) =>
-      handleMouseOrTouchMove(event, type);
-    const upHandler = () => {
-      removeEventListeners(moveHandler, upHandler);
-    };
-
-    addEventListeners(moveHandler, upHandler);
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent, type: "min" | "max") => {
     let currentValue = type === "min" ? minValue : maxValue;
 
@@ -82,65 +73,41 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     `${value.toFixed(2).replace(".", ",")} €`;
 
   return (
-    <div className="range-slider-wrapper" ref={rangeRef}>
-      <div className="range-labels">
-        <input
-          className="input"
-          type="number"
-          value={minValue}
-          step={step}
-          onChange={(e) => handleMinChange(parseFloat(e.target.value))}
-        />
-        <input
-          className="input"
-          type="number"
-          value={maxValue}
-          step={step}
-          onChange={(e) => handleMaxChange(parseFloat(e.target.value))}
-        />
+    <div className={styles.rangeSliderWrapper} ref={rangeRef}>
+      <div className={styles.rangeLabels}>
+        <CustomInput value={minValue} step={step} onChange={handleMinChange} />
+        <CustomInput value={maxValue} step={step} onChange={handleMaxChange} />
       </div>
 
-      <div className="range-track">
+      <div className={styles.rangeTrack}>
         <div
-          className="range-highlight"
+          className={styles.rangeHighlight}
           style={{
             left: `${((minValue - min) / (max - min)) * 100}%`,
             right: `${100 - ((maxValue - min) / (max - min)) * 100}%`,
           }}
         />
-        <div
-          className="range-handle"
-          role="slider"
-          aria-valuemin={min}
-          aria-valuemax={max}
-          aria-valuenow={minValue}
-          aria-label={`Minimum value: ${formatValue(minValue)}`}
-          tabIndex={0}
-          style={{
-            left: `${((minValue - min) / (max - min)) * 100}%`,
-          }}
-          onMouseDown={() => handleMouseOrTouchDown("min")}
-          onTouchStart={() => handleMouseOrTouchDown("min")}
-          onKeyDown={(e) => handleKeyDown(e, "min")}
+        <RangeHandle
+          value={minValue}
+          min={min}
+          max={max}
+          label={`Minimum value: ${formatValue(minValue)}`}
+          position={((minValue - min) / (max - min)) * 100}
+          type="min"
+          onDrag={handleMouseOrTouchMove}
+          onKeyDown={handleKeyDown}
         />
-        <div
-          className="range-handle"
-          role="slider"
-          aria-valuemin={min}
-          aria-valuemax={max}
-          aria-valuenow={maxValue}
-          aria-label={`Maximum value: ${formatValue(maxValue)}`}
-          tabIndex={0}
-          style={{
-            left: `${((maxValue - min) / (max - min)) * 100}%`,
-          }}
-          onMouseDown={() => handleMouseOrTouchDown("max")}
-          onTouchStart={() => handleMouseOrTouchDown("max")}
-          onKeyDown={(e) => handleKeyDown(e, "max")}
+        <RangeHandle
+          value={maxValue}
+          min={min}
+          max={max}
+          label={`Maximum value: ${formatValue(maxValue)}`}
+          position={((maxValue - min) / (max - min)) * 100}
+          type="max"
+          onDrag={handleMouseOrTouchMove}
+          onKeyDown={handleKeyDown}
         />
       </div>
     </div>
   );
 };
-
-export default RangeSlider;

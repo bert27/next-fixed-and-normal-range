@@ -1,7 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 import React from "react";
-import RangeSlider from "../range-slider";
+import { RangeSlider } from "../range-slider";
+
 describe("RangeSlider Component", () => {
   const defaultProps = {
     min: 0,

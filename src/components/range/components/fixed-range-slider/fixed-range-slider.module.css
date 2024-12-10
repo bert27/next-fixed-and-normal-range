@@ -1,10 +1,10 @@
-.fixed-range-slider-wrapper {
+.fixedRangeSliderWrapper {
   width: 90%;
   margin: auto;
   margin-top: 50px;
 }
 
-.range-track {
+.rangeTrack {
   width: 98%;
   height: 4px;
   background: #bebec4;
@@ -12,7 +12,7 @@
   border-radius: 2px;
 }
 
-.range-highlight {
+.rangeHighlight {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -20,13 +20,13 @@
   border-radius: 2px;
 }
 
-.markers-container {
+.markersContainer {
   position: absolute;
   top: -7px;
   width: 100%;
 }
 
-.range-marker {
+.rangeMarker {
   position: absolute;
   cursor: pointer;
   display: flex;
@@ -35,14 +35,14 @@
   transform: translateX(-30%);
 }
 
-.range-marker span {
+.rangeMarker span {
   display: block;
   margin-top: 8px;
   font-size: 12px;
   white-space: nowrap;
 }
 
-.marker-circle {
+.markerCircle {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -50,7 +50,7 @@
   position: relative;
 }
 
-.fixed-range-slider-wrapper .range-handle {
+.fixedRangeSliderWrapper .rangeHandle {
   position: absolute;
   top: -12px;
   width: 22px;
@@ -62,15 +62,7 @@
   transform: translateX(-8%);
 }
 
-.range-handle:hover {
-  transform: translate(-50%, -50%) scale(1.2);
-}
-
-.range-handle:active {
-  user-select: none;
-}
-
-.range-labels {
+.rangeLabels {
   display: flex;
   justify-content: space-between;
   margin-top: 44px;
