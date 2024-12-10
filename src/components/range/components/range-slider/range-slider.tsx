@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import styles from "./range-slider.module.css";
 import { CustomInput } from "../atoms/custom-input";
 import { RangeHandle } from "../atoms/range-handle/range-handle";
+import { calculatePosition } from "../utils";
 
 interface RangeSliderProps {
   min: number;
@@ -37,14 +38,8 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({
     event: MouseEvent | TouchEvent,
     type: "min" | "max"
   ) => {
-    if (!rangeRef.current) return;
-
-    const clientX =
-      event instanceof MouseEvent ? event.clientX : event.touches[0]?.clientX;
-
-    const rect = rangeRef.current.getBoundingClientRect();
-    const percent = (clientX - rect.left) / rect.width;
-    const newValue = Math.round((min + percent * (max - min)) / step) * step;
+    const newValue = calculatePosition(event, rangeRef, { min, max, step });
+    if (newValue === null) return;
 
     if (type === "min") {
       handleMinChange(Math.min(newValue, maxValue - step));

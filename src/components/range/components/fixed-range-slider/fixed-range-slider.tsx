@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import styles from "./fixed-range-slider.module.css";
 import { RangeHandle } from "../atoms/range-handle/range-handle";
+import { calculatePosition } from "../utils";
 
 interface FixedRangeSliderProps {
   values: number[];
@@ -16,13 +17,7 @@ const FixedRangeSlider: React.FC<FixedRangeSliderProps> = ({ values }) => {
   const handleDrag = (event: MouseEvent | TouchEvent, type: "min" | "max") => {
     if (!rangeRef.current) return;
 
-    const clientX =
-      event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
-
-    const rect = rangeRef.current.getBoundingClientRect();
-    const percent = (clientX - rect.left) / rect.width;
-    const newIndex = Math.round(percent * (values.length - 1));
-
+    const newIndex = calculatePosition(event, rangeRef, values.length);
     if (type === "min") {
       if (newIndex >= maxIndex || newIndex < 0) return;
       setMinIndex(newIndex);
@@ -47,13 +42,10 @@ const FixedRangeSlider: React.FC<FixedRangeSliderProps> = ({ values }) => {
     }
   };
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (event: React.MouseEvent) => {
     if (!rangeRef.current) return;
 
-    const rect = rangeRef.current.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    const newIndex = Math.round(percent * (values.length - 1));
-
+    const newIndex = calculatePosition(event, rangeRef, values.length);
     const distanceToMin = Math.abs(newIndex - minIndex);
     const distanceToMax = Math.abs(newIndex - maxIndex);
 
