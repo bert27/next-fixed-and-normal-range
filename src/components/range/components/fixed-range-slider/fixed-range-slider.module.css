@@ -50,18 +50,6 @@
   position: relative;
 }
 
-.fixedRangeSliderWrapper .rangeHandle {
-  position: absolute;
-  top: -12px;
-  width: 22px;
-  height: 22px;
-  background: #2c2d3f;
-  border-radius: 50%;
-  cursor: grab;
-  transition: transform 0.2s;
-  transform: translateX(-8%);
-}
-
 .rangeLabels {
   display: flex;
   justify-content: space-between;

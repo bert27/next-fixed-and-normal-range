@@ -112,6 +112,10 @@ const FixedRangeSlider: React.FC<FixedRangeSliderProps> = ({ values }) => {
           label={`Minimum value`}
           position={(minIndex / (values.length - 1)) * 100}
           onDrag={handleDrag}
+          style={{
+            top: "-12px",
+            transform: "translateX(-8%)",
+          }}
         />
         <RangeHandle
           id={"max-handle"}
@@ -122,6 +126,10 @@ const FixedRangeSlider: React.FC<FixedRangeSliderProps> = ({ values }) => {
           label={`Maximum value`}
           position={(maxIndex / (values.length - 1)) * 100}
           onDrag={handleDrag}
+          style={{
+            top: "-12px",
+            transform: "translateX(-8%)",
+          }}
         />
       </div>
       <div className={styles.rangeLabels}>

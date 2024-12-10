@@ -13,6 +13,7 @@ interface RangeHandleProps {
   onKeyDown?: (e: React.KeyboardEvent, type: "min" | "max") => void;
   id?: string;
   size?: string;
+  style?: React.CSSProperties;
 }
 
 export const RangeHandle: React.FC<RangeHandleProps> = ({
@@ -26,6 +27,7 @@ export const RangeHandle: React.FC<RangeHandleProps> = ({
   onKeyDown,
   id,
   size = "22px",
+  style = {},
 }) => {
   const handleMouseOrTouchDown = () => {
     const moveHandler = (event: MouseEvent | TouchEvent) => onDrag(event, type);
@@ -47,6 +49,7 @@ export const RangeHandle: React.FC<RangeHandleProps> = ({
       style={{
         left: `${position}%`,
         ["--sizeBall" as string]: size,
+        ...style,
       }}
       onMouseDown={handleMouseOrTouchDown}
       onTouchStart={handleMouseOrTouchDown}
